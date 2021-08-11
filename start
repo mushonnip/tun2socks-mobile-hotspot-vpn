@@ -1,4 +1,4 @@
-truncate -s 0 /home/abu/redsocks/redsocks.log
+truncate -s 0 redsocks.log
 iptables -t nat -N REDSOCKS
 iptables -t nat -A REDSOCKS -d 127.0.0.0/8 -j RETURN
 iptables -t nat -A REDSOCKS -d 10.0.0.0/8 -j RETURN
@@ -11,4 +11,4 @@ iptables -t nat -A REDSOCKS -d 240.0.0.0/4 -j RETURN
 iptables -t nat -A REDSOCKS -p tcp -j REDIRECT --to-ports 3070
 iptables -t nat -A REDSOCKS -p udp -j REDIRECT --to-ports 3070
 iptables -t nat -A OUTPUT -j REDSOCKS
-redsocks -c /home/abu/redsocks/redsocks.conf
+redsocks -c redsocks.conf
