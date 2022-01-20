@@ -4,4 +4,4 @@ iptables -Z
 iptables -t nat -F
 iptables -t nat -X
 iptables -t nat -Z
-kill -9 `pgrep redsocks2`
+killall redsocks2 > /dev/null 2>&1
