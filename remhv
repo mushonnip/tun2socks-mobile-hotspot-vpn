@@ -1,4 +1,4 @@
-if redsocks -c redsocks.conf; then
+if redsocks2 -c redsocks.conf; then
     iptables -t nat -N REDSOCKS
     iptables -t nat -A REDSOCKS -d 127.0.0.0/8 -j RETURN
     iptables -t nat -A REDSOCKS -d 10.0.0.0/8 -j RETURN
@@ -19,6 +19,6 @@ else
     iptables -t nat -F
     iptables -t nat -X
     iptables -t nat -Z
-    killall redsocks > /dev/null 2>&1
+    kill -9 `pgrep redsocks2`
     echo "stopped"
 fi
