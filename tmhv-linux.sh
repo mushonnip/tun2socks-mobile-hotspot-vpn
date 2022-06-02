@@ -16,24 +16,32 @@ setup_tap_and_route(){
     fi
 }
 
+kill_all(){
+    sudo route del -net 0.0.0.0 gw 10.0.0.2 netmask 0.0.0.0 dev tun0
+    sudo route del -net 10.0.0.0 gw 0.0.0.0 netmask 255.255.255.0 dev tun0
+    sudo ip link delete tun0
+    sudo killall badvpn-tun2socks
+    printf "${YELLOW}badvpn-tun2socks killed...${NC}\n"
+}
+
 run_badvpn(){
     sudo badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr $PROXY_IP:$PROXY_PORT --udpgw-remote-server-addr $UDPGW_IP:$UDPGW_PORT --loglevel 0 &
     setup_tap_and_route
     printf "${GREEN}badvpn-tun2socks is running${NC}\n"
 }
 
-# check if badvpn-tun2socks is running
-if pidof badvpn-tun2socks > /dev/null 2>&1; then
-    printf "${YELLOW}badvpn-tun2socks is already running, killing it...${NC}\n"
-    sudo route del -net 0.0.0.0 gw 10.0.0.2 netmask 0.0.0.0 dev tun0
-    sudo route del -net 10.0.0.0 gw 0.0.0.0 netmask 255.255.255.0 dev tun0
-    sudo ip link delete tun0
-    sudo killall badvpn-tun2socks
+if [[ $1 == "kill" ]]; then
+    kill_all
+    exit
 fi
 
 # add tap interface
 if sudo ip tuntap add dev tun0 mode tun user $(whoami); then
    echo "tap interface added"
 fi
-
+# check if badvpn-tun2socks is running
+if pidof badvpn-tun2socks > /dev/null 2>&1; then
+    printf "${YELLOW}badvpn-tun2socks is already running, killing it...${NC}\n"
+    kill_all
+fi
 run_badvpn
