@@ -4,10 +4,10 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 PROXY_IP=192.168.43.1
-PROXY_PORT=7100
+PROXY_PORT=1080
 
 UDPGW_IP=127.0.0.1
-UDPGW_PORT=7100
+UDPGW_PORT=7200
 
 setup_tap_and_route(){
     sudo ifconfig tun0 10.0.0.1 netmask 255.255.255.0 > /dev/null 2>&1
